@@ -146,7 +146,7 @@ while True:
     if mainMenu == '1':
         files = []
         for file in os.listdir():
-            if file == "sfcv.py" or file == "thekey.key":
+            if file == "vaultlyn.py" or file == "thekey.key":
                 continue
             if os.path.isfile(file):
                 files.append(file)
@@ -186,7 +186,7 @@ while True:
                 files = []
 
                 for file in os.listdir():
-                    if file == "sfcv.py" or file == "thekey.key":
+                    if file == "vaultlyn.py" or file == "thekey.key":
                         continue
                     if os.path.isfile(file):
                         files.append(file)
