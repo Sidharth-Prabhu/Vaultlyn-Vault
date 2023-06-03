@@ -5,6 +5,7 @@ Vaultlyn is an Open-Source symmetric encryption vault program made using Python 
 
 
 ![Logo](https://firebasestorage.googleapis.com/v0/b/millie-book-cover.appspot.com/o/Vaultlyn%20PNG.png?alt=media&token=1de2988e-ea30-4e5f-acbd-d5ccc1ddcb3d)
+
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-green.svg)](https://opensource.org/licenses/)
 
 [![GPLv3 License](https://img.shields.io/badge/Join%20us%20on-Discord-blue)](https://discord.gg/j2Yw7mAdRt)
