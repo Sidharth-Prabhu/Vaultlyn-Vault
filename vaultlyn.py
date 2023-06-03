@@ -89,9 +89,11 @@ def getpass_asterisk(prompt):
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return password
+    
+    #Replace the '/path/to/directory' according to your system, locate the directory which you created.
 
-if os.path.exists("C:/Users/YCSsi/SFCV_Decrypting_Passcode/user_name.txt"):
-    user_name_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/user_name.txt"
+if os.path.exists("/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"):
+    user_name_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
     with open(user_name_file, "r") as file:
         user_name_content = file.read()
         user_name = user_name_content
@@ -130,9 +132,9 @@ while True:
 
     mainMenu = input("Choose any option between 1-8: ")
 
-    if os.path.exists("C:/Users/YCSsi/SFCV_Decrypting_Passcode/decryption_passcode.txt"):
+    if os.path.exists("/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"):
 
-        decryption_current_passcode = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+        decryption_current_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
         with open(decryption_current_passcode, "r") as file:
             decryption_passcode_content = file.read()
 
@@ -219,7 +221,7 @@ while True:
         if verify_for_changing == decryption_passcode:    
             change_d_passcode = input("Enter a passcode to set for decryption: ")
 
-            d_passcode = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+            d_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
 
             with open(d_passcode, "w") as file:
                 file.write(change_d_passcode)
@@ -260,7 +262,7 @@ while True:
                     show_loading_animation(1)
                     newPasscode = input("Enter the new passcode: ")
 
-                    d_passcode = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+                    d_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
 
                     with open(d_passcode, "w") as file:
                         file.write(newPasscode)
@@ -285,11 +287,11 @@ while True:
         print(f"You have selected Nominee login. This login method is created for people who can access this file other than {user_name}.")
         show_loading_animation(1)
 
-        nominee_1_path = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_1.txt"
-        nominee_1_relation_path = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
+        nominee_1_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1.txt"
+        nominee_1_relation_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
         if os.path.exists(nominee_1_path):
-            nominee_2_path = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_2.txt"
-            nominee_2_relation_path = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
+            nominee_2_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2.txt"
+            nominee_2_relation_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
             if os.path.exists(nominee_2_path):
                 show_loading_animation(2)
                 print(f"{user_name} have 2 Nominees for this vault.")
@@ -368,7 +370,7 @@ while True:
             if infoEdit == '1':
                 change_user_name = input("Enter the new Name: ")
 
-                user_name_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/user_name.txt"
+                user_name_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
 
                 with open(user_name_file, "w") as file:
                     file.write(change_user_name)
@@ -377,17 +379,17 @@ while True:
             elif infoEdit == '2':
                 email_area = input("Please enter your E-Mail: ")
 
-                user_mail_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/user_mail.txt"
+                user_mail_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_mail.txt"
 
                 with open(user_mail_file, "w") as file:
                     file.write(email_area)
                 show_loading_animation(1)
                 print("E-Mail has been updated successfully.")
             elif infoEdit == '3':
-                nominee_1_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_1.txt"
-                nominee_2_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_2.txt"
-                nominee_1_relation_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
-                nominee_2_relation_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
+                nominee_1_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1.txt"
+                nominee_2_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2.txt"
+                nominee_1_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
+                nominee_2_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
                 show_loading_animation(2)
                 if os.path.exists(nominee_2_file):
                     with open(nominee_1_file, 'r') as file:
@@ -485,19 +487,19 @@ while True:
             print("We are sorry, Vaultlyn is officially unsupported for this OS. But you can modify the source code to use this program in your platform.")
         show_loading_animation(1)
         nameInput = input("Please enter your name: ")
-        user_name_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/user_name.txt"
+        user_name_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
         with open(user_name_file, "w") as file:
             file.write(nameInput)
         show_loading_animation(1)
         print("Name successfully loaded.")
         mail_input = input("Please enter your E-Mail Address: ")
-        user_mail_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/user_mail.txt"
+        user_mail_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_mail.txt"
         with open(user_mail_file, "w") as file:
             file.write(mail_input)
         show_loading_animation(1)
         print("Mail successfully loaded")
         passcode_input = getpass_asterisk("Please setup a Passcode for the vault: ")
-        d_passcode = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+        d_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
         with open(d_passcode, "w") as file:
             file.write(passcode_input)
         print("Passcode has been set successfully.")
@@ -505,28 +507,29 @@ while True:
         print("Now let's add nominees to your vault. These nominees can access your vault when you're not available.")
         show_loading_animation(3)
         nominee_1_reg = input("Please enter a nominee who can access your files when you are not around: ")
-        nominee_1_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_1.txt"
+        nominee_1_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1.txt"
         with open(nominee_1_file, "w") as file:
             file.write(nominee_1_reg)
         with open(nominee_1_file, "r") as file:
             nominee_1_show = file.read()
         nominee_1_relation = input(f"What is your relationship with {nominee_1_show}? (Eg.Parent, Sibling, Spouse, Friend): ")
-        nominee_1_relation_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
+        nominee_1_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
         with open(nominee_1_relation_file, 'w') as file:
             file.write(nominee_1_relation)
         show_loading_animation(2)
         print("Nominee added successfully.")
         nominee_2_reg_req = input("Do you wish to add a second nominee to your vault(y/n): ")
+	user_name = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
         if nominee_2_reg_req == 'y':
             show_loading_animation(2)
             nominee_2_reg = input("Add your second Nominee: ")
-            nominee_2_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_2.txt"
+            nominee_2_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2.txt"
             with open(nominee_2_file, "w") as file:
                 file.write(nominee_2_reg)
             with open(nominee_2_file, "r") as file:
                 nominee_2_show = file.read()
             nominee_2_relation = input(f"What is your relationship with {nominee_2_show}? (Eg.Parent, Sibling, Spouse, Friend): ")
-            nominee_2_relation_file = "C:/Users/YCSsi/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
+            nominee_2_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
             with open(nominee_2_relation_file, 'w') as file:
                 file.write(nominee_2_relation)
             show_loading_animation(2)
@@ -543,6 +546,7 @@ while True:
         with open(user_name_file, "r") as file:
             file.read()
             print(f"Welcome to Vaultlyn, {user_name}")
+        show_loading_animation(3)
     else:
         print("Please select a valid option.")
         show_loading_animation(1)
