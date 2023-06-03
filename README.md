@@ -12,43 +12,29 @@ Vaultlyn is an Open-Source symmetric encryption vault program made using Python 
 
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://sidharthplportfolio.netlify.app)
 
+``` Bash
 VVVVVVVV           VVVVVVVV                                lllllll         tttt          lllllll                                           
-
 V::::::V           V::::::V                                l:::::l      ttt:::t          l:::::l                                           
-
 V::::::V           V::::::V                                l:::::l      t:::::t          l:::::l                                           
-
 V::::::V           V::::::V                                l:::::l      t:::::t          l:::::l                                           
-
  V:::::V           V:::::Vaaaaaaaaaaaaa  uuuuuu    uuuuuu   l::::lttttttt:::::ttttttt     l::::lyyyyyyy           yyyyyyynnnn  nnnnnnnn    
-  
-   V:::::V         V:::::V a::::::::::::a u::::u    u::::u   l::::lt:::::::::::::::::t     l::::l y:::::y         y:::::y n:::nn::::::::nn  
-   
-    V:::::V       V:::::V  aaaaaaaaa:::::au::::u    u::::u   l::::lt:::::::::::::::::t     l::::l  y:::::y       y:::::y  n::::::::::::::nn 
-    
-     V:::::V     V:::::V            a::::au::::u    u::::u   l::::ltttttt:::::::tttttt     l::::l   y:::::y     y:::::y   nn:::::::::::::::n
-     
-      V:::::V   V:::::V      aaaaaaa:::::au::::u    u::::u   l::::l      t:::::t           l::::l    y:::::y   y:::::y      n:::::nnnn:::::n
-      
-       V:::::V V:::::V     aa::::::::::::au::::u    u::::u   l::::l      t:::::t           l::::l     y:::::y y:::::y       n::::n    n::::n
-       
-        V:::::V:::::V     a::::aaaa::::::au::::u    u::::u   l::::l      t:::::t           l::::l      y:::::y:::::y        n::::n    n::::n
-        
-         V:::::::::V     a::::a    a:::::au:::::uuuu:::::u   l::::l      t:::::t    tttttt l::::l       y:::::::::y         n::::n    n::::n
-         
-          V:::::::V      a::::a    a:::::au:::::::::::::::uul::::::l     t::::::tttt:::::tl::::::l       y:::::::y          n::::n    n::::n
-          
-           V:::::V       a:::::aaaa::::::a u:::::::::::::::ul::::::l     tt::::::::::::::tl::::::l        y:::::y           n::::n    n::::n
-           
-            V:::V         a::::::::::aa:::a uu::::::::uu:::ul::::::l       tt:::::::::::ttl::::::l       y:::::y            n::::n    n::::n
-            
-             VVV           aaaaaaaaaa  aaaa   uuuuuuuu  uuuullllllll         ttttttttttt  llllllll      y:::::y             nnnnnn    nnnnnn
+  V:::::V         V:::::V a::::::::::::a u::::u    u::::u   l::::lt:::::::::::::::::t     l::::l y:::::y         y:::::y n:::nn::::::::nn  
+   V:::::V       V:::::V  aaaaaaaaa:::::au::::u    u::::u   l::::lt:::::::::::::::::t     l::::l  y:::::y       y:::::y  n::::::::::::::nn 
+    V:::::V     V:::::V            a::::au::::u    u::::u   l::::ltttttt:::::::tttttt     l::::l   y:::::y     y:::::y   nn:::::::::::::::n
+     V:::::V   V:::::V      aaaaaaa:::::au::::u    u::::u   l::::l      t:::::t           l::::l    y:::::y   y:::::y      n:::::nnnn:::::n
+      V:::::V V:::::V     aa::::::::::::au::::u    u::::u   l::::l      t:::::t           l::::l     y:::::y y:::::y       n::::n    n::::n
+       V:::::V:::::V     a::::aaaa::::::au::::u    u::::u   l::::l      t:::::t           l::::l      y:::::y:::::y        n::::n    n::::n
+        V:::::::::V     a::::a    a:::::au:::::uuuu:::::u   l::::l      t:::::t    tttttt l::::l       y:::::::::y         n::::n    n::::n
+         V:::::::V      a::::a    a:::::au:::::::::::::::uul::::::l     t::::::tttt:::::tl::::::l       y:::::::y          n::::n    n::::n
+          V:::::V       a:::::aaaa::::::a u:::::::::::::::ul::::::l     tt::::::::::::::tl::::::l        y:::::y           n::::n    n::::n
+           V:::V         a::::::::::aa:::a uu::::::::uu:::ul::::::l       tt:::::::::::ttl::::::l       y:::::y            n::::n    n::::n
+            VVV           aaaaaaaaaa  aaaa   uuuuuuuu  uuuullllllll         ttttttttttt  llllllll      y:::::y             nnnnnn    nnnnnn
                                                                                                       y:::::y                              
                                                                 A Fernet Cryptographic Vault.        y:::::y                by Sidharth P.L
                                                                                                     y:::::y                                
                                                                                                    y:::::y                                 
                                                                                                   yyyyyyy  
-                                                                                                  
+```
                                                                                                   
 ## Features
 
