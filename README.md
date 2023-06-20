@@ -64,7 +64,7 @@ Install needed libraries to run the Program.
   pip install cryptography
   pip install keyboard
   pip install pyfiglet
-  pip install subprocess
+  pip install subprocess.run
   pip install platform
 ```
 
