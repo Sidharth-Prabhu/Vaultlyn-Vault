@@ -104,7 +104,7 @@ if os.path.exists("/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"):
     welcome_with_username = pyfiglet.figlet_format(welcometext, font=font)
     print(welcome_with_username)
 else:
-    uname_welcome = f"Welcome to Vaultlyn"
+    uname_welcome = "Welcome to Vaultlyn"
     font = "small"
     welcome_without_username = pyfiglet.figlet_format(uname_welcome, font=font)
 
@@ -518,8 +518,8 @@ while True:
             file.write(nominee_1_relation)
         show_loading_animation(2)
         print("Nominee added successfully.")
+        user_name = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
         nominee_2_reg_req = input("Do you wish to add a second nominee to your vault(y/n): ")
-	user_name = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
         if nominee_2_reg_req == 'y':
             show_loading_animation(2)
             nominee_2_reg = input("Add your second Nominee: ")
@@ -545,7 +545,7 @@ while True:
         show_loading_animation(1)
         with open(user_name_file, "r") as file:
             file.read()
-            print(f"Welcome to Vaultlyn, {user_name}")
+            print("Welcome to Vaultlyn!")
         show_loading_animation(3)
     else:
         print("Please select a valid option.")
