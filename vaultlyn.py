@@ -39,15 +39,15 @@ V::::::V           V::::::V                                l:::::l      t:::::t 
          V:::::::V      a::::a    a:::::au:::::::::::::::uul::::::l     t::::::tttt:::::tl::::::l       y:::::::y          n::::n    n::::n
           V:::::V       a:::::aaaa::::::a u:::::::::::::::ul::::::l     tt::::::::::::::tl::::::l        y:::::y           n::::n    n::::n
            V:::V         a::::::::::aa:::a uu::::::::uu:::ul::::::l       tt:::::::::::ttl::::::l       y:::::y            n::::n    n::::n
-            VVV           aaaaaaaaaa  aaaa   uuuuuuuu  uuuullllllll         ttttttttttt  llllllll      y:::::y             nnnnnn    nnnnnn
+            VVV           aaaaaaaaaa  aaaa   uuuuuuuu  uuuullllllll         ttttttttttt  llllllll      y:::::y             nnnnnn    nnnnnn  1.12
                                                                                                       y:::::y                              
-                                                                A Fernet Cryptographic Vault.        y:::::y                by Sidharth P.L
+                                                                A Fernet Cryptographic Vault.        y:::::y             by Sidharth Prabhu
                                                                                                     y:::::y                                
                                                                                                    y:::::y                                 
                                                                                                   yyyyyyy                                                                                                                                                                                                                                                                                                                                                                             
 ''')
-print("Welcome to (Vaultlyn) The Fernet Cryptographic Vault V1.4.5")
-print("©Medusa Infosystems India")
+print("Welcome to (Vaultlyn) The Fernet Cryptographic Vault V1.12")
+print("©Medusa Infosystems International")
 show_loading_animation(3)
 
 def getpass_asterisk(prompt):
@@ -92,8 +92,8 @@ def getpass_asterisk(prompt):
     
     #Replace the '/path/to/directory' according to your system, locate the directory which you created.
 
-if os.path.exists("/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"):
-    user_name_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
+if os.path.exists("/home/sidharth/vault-assets/user_name.txt"):
+    user_name_file = "/home/sidharth/vault-assets/user_name.txt"
     with open(user_name_file, "r") as file:
         user_name_content = file.read()
         user_name = user_name_content
@@ -111,8 +111,8 @@ else:
 #print(f"Welcome to your Vault, {user_name}")
 print("*Please run the setup if Running for the first time.* Default Passcode = 'ApplePie'")
 while True:
-    print('''             -----------------------------------------------------------
-             |                Choose an option:                        |
+    print('''             +_________________________________________________________+
+             |                   Choose an option:                     |
              |                                                         | 
              |    [1] Encrypt	                 [2] Decrypt           |
              |                                                         |
@@ -126,15 +126,18 @@ while True:
              |    [7] Nominee Login              [8] Change User Info  |
              |                                                         |
              |                                                         |
-             |    [0] Run Setup                                        |
+             |    [0] Run Setup                  [9] Custom Encryption |
              |                                                         |
-             -----------------------------------------------------------''')
+             |                                                         |
+             |    [10] Open Source Code                                |
+             |                                                         |
+             +_________________________________________________________+''')
 
     mainMenu = input("Choose any option between 1-8: ")
 
-    if os.path.exists("/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"):
+    if os.path.exists("/home/sidharth/vault-assets/decryption_passcode.txt"):
 
-        decryption_current_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+        decryption_current_passcode = "/home/sidharth/vault-assets/decryption_passcode.txt"
         with open(decryption_current_passcode, "r") as file:
             decryption_passcode_content = file.read()
 
@@ -143,77 +146,131 @@ while True:
         print("Passcode Configuration file not found. Switching to Default passcode.")
         decryption_passcode = "ApplePie"
 
-    if mainMenu == '1':
-        files = []
-        for file in os.listdir():
-            if file == "vaultlyn.py" or file == "thekey.key":
-                continue
-            if os.path.isfile(file):
-                files.append(file)
-        print(files)
-
-        initialInp = input("Do you wish to encrypt all the files in this directory? (Y/N): ")
-        if initialInp.lower() == 'y':
-            key = Fernet.generate_key()
-
-            with open("thekey.key", "wb") as thekey:
-                thekey.write(key)
-
-            for file in files:
-                with open(file, "rb") as thefile:
-                    contents = thefile.read()
-                contents_encrypted = Fernet(key).encrypt(contents)
-                with open(file, "wb") as thefile:
-                    thefile.write(contents_encrypted)
-            
-            print("This directory is now encrypting")
-            show_loading_animation(2)
-            print("Encryption successful.")
-            time.sleep(3)
-        else:
-            print("Vaultlyn Encryption Terminated.")
-
-    elif mainMenu == '2':
-        print("Please enter your passcode for Decrypting your files.")
-        show_loading_animation(1)
-        chances = 3
-
-        while chances > 0:
-            phrase = getpass_asterisk("Enter the verification phrase: ")
-
-            if phrase == decryption_passcode:
-                print("Verification successful!")
+    if mainMenu == '1':        
+            def encrypt_folder(folder_path):
                 files = []
-
-                for file in os.listdir():
+                for file in os.listdir(folder_path):
                     if file == "vaultlyn.py" or file == "thekey.key":
                         continue
-                    if os.path.isfile(file):
+                    if os.path.isfile(os.path.join(folder_path, file)):
                         files.append(file)
-                
                 print(files)
 
-                with open("thekey.key", "rb") as key:
-                    secretkey = key.read()
-                
-                print("Passcode Verified successfully.")
-                for file in files:
-                    with open(file, "rb") as thefile:
-                        contents = thefile.read()
-                    contents_decrypted = Fernet(secretkey).decrypt(contents)
-                    with open(file, "wb") as thefile:
-                        thefile.write(contents_decrypted)
-                show_loading_animation(2)
-                print("Files Decrypted successfully")
-                time.sleep(3)
-                break
+                initialInput = input("Do you wish to encrypt all the files in this directory? (y/n): ")
+                if initialInput == 'y' or initialInput == 'Y':
+                    key = Fernet.generate_key()
 
-            else:
-                chances -= 1
-                print(f"Verification failed! {chances} chances remaining.")
+                    with open("thekey.key", "wb") as thekey:
+                        thekey.write(key)
 
-            if chances == 0:
-                print("Verification failed! Exiting...")
+                    for file in files:
+                        file_path = os.path.join(folder_path, file)
+                        with open(file_path, "rb") as thefile:
+                            contents = thefile.read()
+                        content_encrypted = Fernet(key).encrypt(contents)
+                        with open(file_path, "wb") as thefile:
+                            thefile.write(content_encrypted)
+
+                    print("The Folder is now encrypting")
+                    show_loading_animation(2)
+                    print("Encryption successful")
+            folder_path = "/home/sidharth/vault/Vault"
+            encrypt_folder(folder_path)
+
+    elif mainMenu == '2':
+        show_loading_animation(1)
+
+        cdecryptrn = input("Do you want to decrypt a custom directory? (Y/N): ")
+        if cdecryptrn == 'y' or cdecryptrn == 'Y':
+            print("Please enter your passcode for Decrypting your files.")
+            chances = 3
+
+            while chances > 0:
+                phrase = getpass_asterisk("Enter the verification phrase: ")
+
+                if phrase == decryption_passcode:
+                    print("Verification successful!")
+                    def decrypt_custom_folder(custom_folder_path):
+                        files=[]
+                        for file in os.listdir(custom_folder_path):
+                            if file == "vaultlyn.py" or file == "thecustomkey.key":
+                                continue
+                            if os.path.isfile(os.path.join(custom_folder_path, file)):
+                                files.append(file)
+                        
+                        print(files)
+
+                        with open(os.path.join( "thecustomkey.key"), "rb") as key_file:
+                            secretkey = key_file.read()
+
+                        print("Passcode Verified successfully!")
+
+                        for file in files:
+                            file_path = os.path.join(custom_folder_path, file)
+                            with open(file_path, "rb") as thefile:
+                                contents = thefile.read()
+                            contents_decrypted = Fernet(secretkey).decrypt(contents)
+                            with open(file_path, "wb") as thefile:
+                                thefile.write(contents_decrypted)
+
+                        show_loading_animation(2)
+                        print("Files Decrypted successfully!")
+
+                    custom_folder_path = input("Enter the directory: ")
+                    decrypt_custom_folder(custom_folder_path)
+                    time.sleep(3)
+                    break
+
+                else:
+                    chances -= 1
+                    print(f"Verification failed! {chances} chances remaining.")
+
+                if chances == 0:
+                    print("Verification failed! Exiting...")
+        else:
+            chances = 3
+            while chances > 0:
+                phrase = getpass_asterisk("Enter the verification phrase: ")
+
+                if phrase == decryption_passcode:
+                    print("Verification successful!")
+                    def decrypt_custom_folder(folder_path):
+                        files=[]
+                        for file in os.listdir(folder_path):
+                            if file == "vaultlyn.py" or file == "thekey.key":
+                                continue
+                            if os.path.isfile(os.path.join(folder_path, file)):
+                                files.append(file)
+                        
+                        print(files)
+
+                        with open(os.path.join( "thekey.key"), "rb") as key_file:
+                            secretkey = key_file.read()
+
+                        print("Passcode Verified successfully!")
+
+                        for file in files:
+                            file_path = os.path.join(folder_path, file)
+                            with open(file_path, "rb") as thefile:
+                                contents = thefile.read()
+                            contents_decrypted = Fernet(secretkey).decrypt(contents)
+                            with open(file_path, "wb") as thefile:
+                                thefile.write(contents_decrypted)
+
+                        show_loading_animation(2)
+                        print("Files Decrypted successfully!")
+
+                    folder_path = "/home/sidharth/vault/Vault"
+                    decrypt_custom_folder(folder_path)
+                    time.sleep(3)
+                    break
+
+                else:
+                    chances -= 1
+                    print(f"Verification failed! {chances} chances remaining.")
+
+                if chances == 0:
+                    print("Verification failed! Exiting...")
     elif mainMenu == '3':
         verify_for_changing = getpass_asterisk("Enter the current passcode: ")
         print("Verification Successful..")
@@ -221,7 +278,7 @@ while True:
         if verify_for_changing == decryption_passcode:    
             change_d_passcode = input("Enter a passcode to set for decryption: ")
 
-            d_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+            d_passcode = "/home/sidharth/vault-assets/decryption_passcode.txt"
 
             with open(d_passcode, "w") as file:
                 file.write(change_d_passcode)
@@ -262,7 +319,7 @@ while True:
                     show_loading_animation(1)
                     newPasscode = input("Enter the new passcode: ")
 
-                    d_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+                    d_passcode = "/home/sidharth/vault-assets/decryption_passcode.txt"
 
                     with open(d_passcode, "w") as file:
                         file.write(newPasscode)
@@ -287,11 +344,11 @@ while True:
         print(f"You have selected Nominee login. This login method is created for people who can access this file other than {user_name}.")
         show_loading_animation(1)
 
-        nominee_1_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1.txt"
-        nominee_1_relation_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
+        nominee_1_path = "/home/sidharth/vault-assets/nominee_1.txt"
+        nominee_1_relation_path = "/home/sidharth/vault-assets/nominee_1_relation.txt"
         if os.path.exists(nominee_1_path):
-            nominee_2_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2.txt"
-            nominee_2_relation_path = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
+            nominee_2_path = "/home/sidharth/vault-assets/nominee_2.txt"
+            nominee_2_relation_path = "/home/sidharth/vault-assets/nominee_2_relation.txt"
             if os.path.exists(nominee_2_path):
                 show_loading_animation(2)
                 print(f"{user_name} have 2 Nominees for this vault.")
@@ -370,7 +427,7 @@ while True:
             if infoEdit == '1':
                 change_user_name = input("Enter the new Name: ")
 
-                user_name_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
+                user_name_file = "/home/sidharth/vault-assets/user_name.txt"
 
                 with open(user_name_file, "w") as file:
                     file.write(change_user_name)
@@ -379,17 +436,17 @@ while True:
             elif infoEdit == '2':
                 email_area = input("Please enter your E-Mail: ")
 
-                user_mail_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_mail.txt"
+                user_mail_file = "/home/sidharth/vault-assets/user_mail.txt"
 
                 with open(user_mail_file, "w") as file:
                     file.write(email_area)
                 show_loading_animation(1)
                 print("E-Mail has been updated successfully.")
             elif infoEdit == '3':
-                nominee_1_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1.txt"
-                nominee_2_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2.txt"
-                nominee_1_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
-                nominee_2_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
+                nominee_1_file = "/home/sidharth/vault-assets/nominee_1.txt"
+                nominee_2_file = "/home/sidharth/vault-assets/nominee_2.txt"
+                nominee_1_relation_file = "/home/sidharth/vault-assets/nominee_1_relation.txt"
+                nominee_2_relation_file = "/home/sidharth/vault-assets/nominee_2_relation.txt"
                 show_loading_animation(2)
                 if os.path.exists(nominee_2_file):
                     with open(nominee_1_file, 'r') as file:
@@ -487,19 +544,19 @@ while True:
             print("We are sorry, Vaultlyn is officially unsupported for this OS. But you can modify the source code to use this program in your platform.")
         show_loading_animation(1)
         nameInput = input("Please enter your name: ")
-        user_name_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
+        user_name_file = "/home/sidharth/vault-assets/user_name.txt"
         with open(user_name_file, "w") as file:
             file.write(nameInput)
         show_loading_animation(1)
         print("Name successfully loaded.")
         mail_input = input("Please enter your E-Mail Address: ")
-        user_mail_file = "/path/to/directory/SFCV_Decrypting_Passcode/user_mail.txt"
+        user_mail_file = "/home/sidharth/vault-assets/user_mail.txt"
         with open(user_mail_file, "w") as file:
             file.write(mail_input)
         show_loading_animation(1)
         print("Mail successfully loaded")
         passcode_input = getpass_asterisk("Please setup a Passcode for the vault: ")
-        d_passcode = "/path/to/directory/SFCV_Decrypting_Passcode/decryption_passcode.txt"
+        d_passcode = "/home/sidharth/vault-assets/decryption_passcode.txt"
         with open(d_passcode, "w") as file:
             file.write(passcode_input)
         print("Passcode has been set successfully.")
@@ -507,29 +564,29 @@ while True:
         print("Now let's add nominees to your vault. These nominees can access your vault when you're not available.")
         show_loading_animation(3)
         nominee_1_reg = input("Please enter a nominee who can access your files when you are not around: ")
-        nominee_1_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1.txt"
+        nominee_1_file = "/home/sidharth/vault-assets/nominee_1.txt"
         with open(nominee_1_file, "w") as file:
             file.write(nominee_1_reg)
         with open(nominee_1_file, "r") as file:
             nominee_1_show = file.read()
         nominee_1_relation = input(f"What is your relationship with {nominee_1_show}? (Eg.Parent, Sibling, Spouse, Friend): ")
-        nominee_1_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_1_relation.txt"
+        nominee_1_relation_file = "/home/sidharth/vault-assets/nominee_1_relation.txt"
         with open(nominee_1_relation_file, 'w') as file:
             file.write(nominee_1_relation)
         show_loading_animation(2)
         print("Nominee added successfully.")
-        user_name = "/path/to/directory/SFCV_Decrypting_Passcode/user_name.txt"
+        user_name = "/home/sidharth/vault-assets/user_name.txt"
         nominee_2_reg_req = input("Do you wish to add a second nominee to your vault(y/n): ")
         if nominee_2_reg_req == 'y':
             show_loading_animation(2)
             nominee_2_reg = input("Add your second Nominee: ")
-            nominee_2_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2.txt"
+            nominee_2_file = "/home/sidharth/vault-assets/nominee_2.txt"
             with open(nominee_2_file, "w") as file:
                 file.write(nominee_2_reg)
             with open(nominee_2_file, "r") as file:
                 nominee_2_show = file.read()
             nominee_2_relation = input(f"What is your relationship with {nominee_2_show}? (Eg.Parent, Sibling, Spouse, Friend): ")
-            nominee_2_relation_file = "/path/to/directory/SFCV_Decrypting_Passcode/nominee_2_relation.txt"
+            nominee_2_relation_file = "/home/sidharth/vault-assets/nominee_2_relation.txt"
             with open(nominee_2_relation_file, 'w') as file:
                 file.write(nominee_2_relation)
             show_loading_animation(2)
@@ -547,6 +604,81 @@ while True:
             file.read()
             print("Welcome to Vaultlyn!")
         show_loading_animation(3)
+
+    elif mainMenu == '9':
+        def encrypt_custom_folder(folder_path):
+            files = []
+            for file in os.listdir(folder_path):
+                if file == "vaultlyn.py" or file == "thecustomkey.key":
+                    continue
+                if os.path.isfile(os.path.join(folder_path, file)):
+                    files.append(file)
+            print(files)
+
+            initialInput = input(f"Do you with to encrypt all the files in the following ({folder_path}) Directory? (y/n): ")
+            if initialInput == 'y' or initialInput == 'Y':
+                key = Fernet.generate_key()
+
+                with open("thecustomkey.key", 'wb') as thekey:
+                    thekey.write(key)
+
+                for file in files:
+                    file_path = os.path.join(folder_path, file)
+                    with open(file_path, "rb") as thefile:
+                        contents = thefile.read()
+                    contents_encrypted = Fernet(key).encrypt(contents)
+                    with open(file_path, "wb") as thefile:
+                        thefile.write(contents_encrypted)
+
+                print("The folder is now encrypting...")
+                show_loading_animation(2)
+                print("Encryption Successful!")
+
+        folder_path = input("Enter the path to the folder which you want to encrypt: ")
+        encrypt_custom_folder(folder_path)
+
+    elif mainMenu == '10':
+        operating_system = sys.platform
+
+        print(f"Operating System Detected: {operating_system}")
+        show_loading_animation(2)
+        print("Opening Source code..")
+        show_loading_animation(1)
+        source_code_path = sys.argv[0]
+        code_editor = "code"
+        # try:
+        #     subprocess.run(code_editor, source_code_path)
+        # except Exception as e:
+            # print(e)
+        time.sleep(1)
+        if operating_system.startswith('win'):
+            if os.system("code --version") == 0:
+                os.system(f"code {source_code_path}")
+            else:
+                try:
+                    os.system(f"start {source_code_path}")
+                except Exception as e:
+                    print(f"An Error Occured: {e}")
+        elif operating_system.startswith('linux'):
+            if os.system("code --version") == 0:
+                os.system(f"code {source_code_path}")
+            else:
+                try:
+                    os.system(f"xdg-open {source_code_path}")
+                except Exception as e:
+                    print(f"An Error Occured: {e}")
+        elif operating_system.startswith('darwin'):
+            if os.system("code --version") == 0:
+                os.system(f"code {source_code_path}")
+            else:
+                try:
+                    os.system(f"open {source_code_path}")
+                except Exception as e:
+                    print(f"An Error Occured: {e}")
+        else:
+            print("Sorry This Operating System is not supported by Vaultlyn. please edit the file manually")
+            time.sleep(3)
+
     else:
         print("Please select a valid option.")
         show_loading_animation(1)
