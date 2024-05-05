@@ -119,7 +119,7 @@ if not os.path.exists(config_dir_path):
     c = conn.cursor()
 
     c.execute('''CREATE TABLE IF NOT EXISTS users
-            (name TEXT, email TEXT, password TEXT)''')
+            (name TEXT, email TEXT, password TEXT, vault_path TEXT)''')
     conn.commit()
 
     print("User config not found.. Create a new User.")
@@ -129,11 +129,15 @@ if not os.path.exists(config_dir_path):
     show_loading_animation("Loading..", 1)
     password = getpass_asterisk("Enter your password: ")
     show_loading_animation("Loading..", 2)
+    vault_path_inp = input("Enter a path to use it as Vault: ")
+    show_loading_animation("Adding desired path...", 2)
 
+    if '\\' in vault_path_inp:
+        vault_path_inp_crct = vault_path_inp.replace('\\', '/')
     hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-    c.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+    c.execute("INSERT INTO users (name, email, password, vault_path) VALUES (?, ?, ?, ?)",
               # Store the hashed password as a string
-              (name, email, hashed_password.decode()))
+              (name, email, hashed_password.decode(), vault_path_inp_crct))
     conn.commit()
     print("User config saved successfully!")
     conn.close()
@@ -180,10 +184,13 @@ if result:
 +----------------------------------------------------------+
 |                     1. Encrypt Data.                     |
 |                     2. Decrypt Data.                     |
-|                     3. Close the vault.                  |
-|                     4. Change password.                  |
-|                     5. What is Vaultlyn?                 |
-|                     6. About Vaultlyn.                   |
+|                     3. Open Vault.                       |
+|                     4. Change Vault.                     |
+|                     5. Locate Decryption Key.            |
+|                     6. Close Vaultlyn.                   |
+|                     7. Change password.                  |
+|                     8. What is Vaultlyn?                 |
+|                     9. About Vaultlyn.                   |
 +----------------------------------------------------------+
     """)
             mainMenu = input("Choose an option: ")
@@ -216,7 +223,14 @@ if result:
 
                         show_loading_animation("Encrypting data...",2)
                         print("The folder is now encrypted...")
-                vault_folder = vault_dir_path
+                conn = sqlite3.connect(f'{config_dir_path}/user_info.db')
+                c = conn.cursor()
+                c.execute('SELECT vault_path FROM users')
+                result = c.fetchone()
+
+                if result:
+                    vault_path = result[0]
+                    vault_folder = vault_path
                 encrypt_folder(vault_folder)
             elif mainMenu == '2':
                 decrypt_confirmation = input("Do you want to decrypt your files? (Y/N): ")
@@ -241,16 +255,60 @@ if result:
                                 thefile.write(contents_decrypted)
                         show_loading_animation("Decrypting data...", 2)
                         print("Decryption Successful...")
-                    decrypt_dir = vault_dir_path
+                        os.remove("decryptkey.key")
+                    conn = sqlite3.connect(f'{config_dir_path}/user_info.db')
+                    c = conn.cursor()
+                    c.execute('SELECT vault_path FROM users')
+                    result = c.fetchone()
+
+                    if result:
+                        vault_path = result[0]
+                        decrypt_dir = vault_path
                     decrypt_folder(decrypt_dir)
                 else:
                     pass
             elif mainMenu == '3':
-                show_loading_animation("Vault closing...", 1)
+                conn = sqlite3.connect(f'{config_dir_path}/user_info.db')
+                c = conn.cursor()
+                c.execute('SELECT vault_path FROM users')
+                result = c.fetchone()
+
+                if result:
+                    vault_path = result[0]
+                    if os.path.exists(vault_path):
+                        if platform.system() == 'Windows':
+                            os.startfile(vault_path)
+                        elif platform.system() == 'Darwin':
+                            os.system('open' + vault_path)
+                        else:
+                            os.system('xdg-open' + vault_path)
+                    else:
+                        print("Vault path does not exist.")
+                else:
+                    print("No user found in the database.")
+                conn.close()
+            elif mainMenu == '4':
+                conn = sqlite3.connect(f'{config_dir_path}/user_info.db')
+                c = conn.cursor()
+
+                if os.path.exists("decryptkey.key"):
+                    print("You already have a folder encrypted. Decrypt that folder to change to a new Vault.")
+                    input("Press ENTER to continue...")
+                else:
+                    new_vault_path = input("Enter the new path to your vault: ")
+                    c.execute("UPDATE users SET vault_path = ?", (new_vault_path,))
+                    print("New vault has been successfully added!")
+                    show_loading_animation("Please Wait", 2)
+                conn.commit()
+                conn.close()
+            elif mainMenu == '5':
+                os.startfile(current_directory)
+            elif mainMenu == '6':
+                show_loading_animation("Vaultlyn closing...", 1)
                 print("Bye! See you later!")
                 exit()
 
-            elif mainMenu == '4':
+            elif mainMenu == '7':
                 def change_password():
                     conn = sqlite3.connect(f'{config_dir_path}/user_info.db')
                     c = conn.cursor()
@@ -273,7 +331,7 @@ if result:
                         conn.close()
                         print("Incorrect password. Password change failed.")
                 change_password()
-            elif mainMenu == '5':
+            elif mainMenu == '8':
                 print("""
                       Vaultlyn is a File encryption vault which is used for locking files on a computer locally by encrypting it.
                       This program uses 'Fernet Encryption' to lock the files. When a file is locked using
@@ -283,7 +341,7 @@ if result:
                       ©Frissco Creative Labs 2024
 """)
                 input("Press ENTER to continue...")
-            elif mainMenu == '6':
+            elif mainMenu == '9':
                 print("""
                      __      __         _ _   _             
                      \ \    / /        | | | | |            
