@@ -134,6 +134,8 @@ if not os.path.exists(config_dir_path):
 
     if '\\' in vault_path_inp:
         vault_path_inp_crct = vault_path_inp.replace('\\', '/')
+    else:
+        vault_path_inp_crct = vault_path_inp
     hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     c.execute("INSERT INTO users (name, email, password, vault_path) VALUES (?, ?, ?, ?)",
               # Store the hashed password as a string
@@ -261,10 +263,14 @@ if result:
                     c.execute('SELECT vault_path FROM users')
                     result = c.fetchone()
 
-                    if result:
-                        vault_path = result[0]
-                        decrypt_dir = vault_path
-                    decrypt_folder(decrypt_dir)
+                    if os.path.exists("decryptkey.key"):
+                        if result:
+                            vault_path = result[0]
+                            decrypt_dir = vault_path
+                        decrypt_folder(decrypt_dir)
+                    else:
+                        print("No Files are encrypted...")
+                        input("Pres ENTER to continue...")
                 else:
                     pass
             elif mainMenu == '3':
