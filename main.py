@@ -136,10 +136,23 @@ if not os.path.exists(config_dir_path):
         vault_path_inp_crct = vault_path_inp.replace('\\', '/')
     else:
         vault_path_inp_crct = vault_path_inp
-    hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-    c.execute("INSERT INTO users (name, email, password, vault_path) VALUES (?, ?, ?, ?)",
-              # Store the hashed password as a string
-              (name, email, hashed_password.decode(), vault_path_inp_crct))
+    
+    if platform.system() == 'Windows':
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        c.execute("INSERT INTO users (name, email, password, vault_path) VALUES (?, ?, ?, ?)",
+                # Store the hashed password as a string
+                (name, email, hashed_password.decode(), vault_path_inp_crct))
+    elif platform.system() == 'Darwin':
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        c.execute("INSERT INTO users (name, email, password, vault_path) VALUES (?, ?, ?, ?)",
+                # Store the hashed password as a string
+                (name, email, hashed_password.decode(), vault_path_inp_crct))
+    elif platform.system() == 'Linux':
+        vault_path_inp_crct = vault_path_inp_crct.replace(' ', '\ ')
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        c.execute("INSERT INTO users (name, email, password, vault_path) VALUES (?, ?, ?, ?)",
+                # Store the hashed password as a string
+                (name, email, hashed_password.decode(), vault_path_inp_crct))
     conn.commit()
     print("User config saved successfully!")
     conn.close()
@@ -287,7 +300,7 @@ if result:
                         elif platform.system() == 'Darwin':
                             os.system('open' + vault_path)
                         else:
-                            os.system('xdg-open' + vault_path)
+                            subprocess.Popen(['xdg-open', vault_path])
                     else:
                         print("Vault path does not exist.")
                 else:
@@ -308,7 +321,12 @@ if result:
                 conn.commit()
                 conn.close()
             elif mainMenu == '5':
-                os.startfile(current_directory)
+                if platform.system() == 'Windows':
+                    os.startfile(current_directory)
+                elif platform.system() == 'Darwin':
+                    os.system('open' + current_directory)
+                else:
+                    subprocess.Popen(['xdg-open', current_directory])
             elif mainMenu == '6':
                 show_loading_animation("Vaultlyn closing...", 1)
                 print("Bye! See you later!")
