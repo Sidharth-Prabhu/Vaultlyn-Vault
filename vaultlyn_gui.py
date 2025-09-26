@@ -9,6 +9,8 @@ import subprocess
 import sys
 from cryptography.fernet import Fernet, InvalidToken
 import os
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QIcon
 
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QDialog, QVBoxLayout, QLabel, QLineEdit,
@@ -17,7 +19,6 @@ from PyQt5.QtWidgets import (
     QMenu, QAction
 )
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent, QPixmap
-from PyQt5.QtCore import Qt
 
 CONFIG_DIR = 'CONFIG'
 DB_PATH = os.path.join(CONFIG_DIR, 'user_info.db')
@@ -29,6 +30,7 @@ class LoginDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Login")
+        self.setWindowIcon(QIcon("icon.png"))
 
         # Add logo
         logo_label = QLabel(self)
@@ -94,6 +96,7 @@ class CreateUserDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Create User")
+        self.setWindowIcon(QIcon("icon.png"))
         self.name_input = QLineEdit()
         self.email_input = QLineEdit()
         self.password_input = QLineEdit()
@@ -131,6 +134,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Vaultlyn V1.15")
+        self.setWindowIcon(QIcon("icon.png"))
         self.setAcceptDrops(True)
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
@@ -194,11 +198,23 @@ class MainWindow(QMainWindow):
         self.vault_list.customContextMenuRequested.connect(
             self.show_context_menu)
 
-        # File tree with drag-and-drop support
+        # Search bar with timer
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Search files/folders...")
+        self.search_timer = QTimer(self)
+        self.search_timer.setSingleShot(True)
+        self.search_timer.setInterval(300)  # 300ms delay
+        self.search_timer.timeout.connect(self.perform_search)
+        self.search_input.textChanged.connect(self.schedule_search)
+
+        # File tree with drag-and-drop and context menu support
         self.file_tree = QTreeWidget()
         self.file_tree.setHeaderLabels(["Files"])
         self.file_tree.itemDoubleClicked.connect(self.open_file)
         self.file_tree.setAcceptDrops(True)
+        self.file_tree.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.file_tree.customContextMenuRequested.connect(
+            self.show_file_context_menu)
 
         # Layout
         layout = QHBoxLayout()
@@ -224,7 +240,11 @@ class MainWindow(QMainWindow):
         decrypt_button.clicked.connect(self.decrypt)
         left.addWidget(decrypt_button)
         layout.addLayout(left)
-        layout.addWidget(self.file_tree)
+
+        right = QVBoxLayout()
+        right.addWidget(self.search_input)
+        right.addWidget(self.file_tree)
+        layout.addLayout(right)
 
         central = QWidget()
         central.setLayout(layout)
@@ -250,6 +270,17 @@ class MainWindow(QMainWindow):
         delete_vault_action.triggered.connect(self.delete_vault)
         menu.addAction(delete_vault_action)
         menu.exec_(self.vault_list.mapToGlobal(position))
+
+    def show_file_context_menu(self, position):
+        item = self.file_tree.itemAt(position)
+        if not item:
+            return
+        menu = QMenu(self)
+        remove_decrypt_action = QAction("Remove and Decrypt File", self)
+        remove_decrypt_action.triggered.connect(
+            lambda: self.remove_and_decrypt_file(item))
+        menu.addAction(remove_decrypt_action)
+        menu.exec_(self.file_tree.mapToGlobal(position))
 
     def load_vaults(self):
         self.vault_list.clear()
@@ -381,12 +412,6 @@ class MainWindow(QMainWindow):
                 "\n".join(skipped_files[:5])
         QMessageBox.information(self, "Success", message)
         event.accept()
-
-    def drag_enter_event(self, event: QDragEnterEvent):
-        if event.mimeData().hasUrls():
-            event.accept()
-        else:
-            event.ignore()
 
     def add_vault_with_path(self, path):
         name, ok = QInputDialog.getText(
@@ -738,16 +763,50 @@ class MainWindow(QMainWindow):
                 self, "Success", "Vault deleted successfully!")
 
     def what_is(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("What is Vaultlyn?")
+        dialog.setWindowIcon(QIcon("icon.png"))
+
+        # Add logo
+        logo_label = QLabel(dialog)
+        pixmap = QPixmap(LOGO_PATH)
+        if not pixmap.isNull():
+            scaled_pixmap = pixmap.scaled(
+                300, 300, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            logo_label.setPixmap(scaled_pixmap)
+        else:
+            logo_label.setText("Logo not found")
+        logo_label.setAlignment(Qt.AlignCenter)
+
+        # Formatted text
+        text_label = QLabel(dialog)
+        text_label.setTextFormat(Qt.RichText)
+        text_label.setAlignment(Qt.AlignJustify)
+        text_label.setWordWrap(True)
         text = """
-Vaultlyn is a File encryption vault which is used for locking files on a computer locally by encrypting it.
-This program uses 'Fernet Encryption' to lock the files. When a file is locked using
-Vaultlyn, it can be only unlocked with the dedicated decryption key which was generated
-while locking the files. THIS TYPE OF ENCRYPTION CANNOT BE MANIPULATED WITHOUT THE DECRYPTION KEY.
-Vaultlyn supports multiple vaults with individual passphrases and recovery options.
-Vaultlyn is an open source program, made by Sidharth Prabhu from Frissco Creative Labs.
-©Frissco Creative Labs 2025
-"""
-        QMessageBox.information(self, "What is Vaultlyn?", text)
+            <h2>Vaultlyn Overview</h2>
+            <p>Vaultlyn is a file encryption vault designed to secure your files locally by encrypting them on your computer.</p>
+            
+            <h3>Key Features:</h3>
+            <ul>
+                <li><b>Fernet Encryption:</b> Utilizes robust Fernet encryption to lock files, ensuring they can only be unlocked with the dedicated decryption key generated during encryption.</li>
+                <li><b>Security Note:</b> This encryption cannot be manipulated without the decryption key, providing strong protection.</li>
+                <li><b>Multiple Vaults:</b> Supports the creation of multiple vaults, each with individual passphrases and recovery options for added flexibility.</li>
+            </ul>
+            
+            <h3>About Vaultlyn:</h3>
+            <p>Vaultlyn is an open-source program developed by Sidharth Prabhu from Frissco Creative Labs. ©Frissco Creative Labs 2025</p>
+        """
+        text_label.setText(text)
+
+        # Layout
+        layout = QVBoxLayout()
+        layout.addWidget(logo_label)
+        layout.addWidget(text_label)
+        layout.addStretch()
+        dialog.setLayout(layout)
+        dialog.resize(400, 300)
+        dialog.exec_()
 
     def about(self):
         text = """
@@ -780,6 +839,64 @@ Developed by Sidharth Prabhu
             return fernet_key
         except InvalidToken:
             return None
+
+    def remove_and_decrypt_file(self, item):
+        vid = self.get_selected_vault_id()
+        if vid is None:
+            return
+        full_path = item.data(0, Qt.UserRole)
+        if not full_path or not os.path.exists(full_path):
+            QMessageBox.warning(self, "Error", "Selected file does not exist.")
+            return
+        passphrase, ok = QInputDialog.getText(
+            self, "Passphrase", "Enter vault passphrase:", QLineEdit.Password)
+        if not ok:
+            return
+        fernet_key = self.get_fernet_key(vid, passphrase)
+        if fernet_key is None:
+            QMessageBox.warning(self, "Error", "Wrong passphrase.")
+            return
+        f = Fernet(fernet_key)
+        try:
+            with open(full_path, "rb") as tf:
+                contents = tf.read()
+            try:
+                dec_contents = f.decrypt(contents)
+                temp_path = full_path + ".decrypted"
+                with open(temp_path, "wb") as tf:
+                    tf.write(dec_contents)
+                os.remove(full_path)
+                shutil.move(temp_path, full_path)
+                # Refresh file tree
+                self.show_files(self.vault_list.currentItem())
+                QMessageBox.information(
+                    self, "Success", f"File {os.path.basename(full_path)} removed and decrypted.")
+            except InvalidToken:
+                QMessageBox.warning(
+                    self, "Error", "File is not encrypted or wrong key.")
+                return
+        except (PermissionError, OSError) as e:
+            QMessageBox.warning(
+                self, "Error", f"Failed to remove/decrypt file: {e}")
+            return
+
+    def schedule_search(self):
+        # Start or restart the timer when text changes
+        self.search_timer.start()
+
+    def perform_search(self):
+        search_text = self.search_input.text().lower()
+        if len(search_text) < 3:  # Minimum 3 characters
+            return
+        items = self.file_tree.findItems(
+            search_text, Qt.MatchContains | Qt.MatchRecursive, 0)
+        if items:
+            item = items[0]  # Select the first matching item
+            self.file_tree.setCurrentItem(item)
+            self.file_tree.scrollToItem(item)
+        else:
+            QMessageBox.warning(
+                self, "Search", "No matching files or folders found.")
 
     def close(self):
         QMessageBox.information(self, "Closing", "Bye! See you later!")
